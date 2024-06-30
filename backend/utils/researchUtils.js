@@ -19,7 +19,19 @@ const applyResearchEffects = (research, effects) => {
     return research.save();
 };
 
+const completeResearch = async (research) => {
+    const now = new Date();
+    const currentResearch = research.researchQueue[0];
+
+    if (now >= currentResearch.completionTime) {
+        research[currentResearch.type]++;
+        research.researchQueue.shift();
+        await research.save();
+    }
+};
+
 module.exports = {
     calculateResearchTime,
-    applyResearchEffects
+    applyResearchEffects,
+    completeResearch
 };

@@ -84,6 +84,16 @@
                   </llm>
                 </llm>
               </chat>
+              <chat>
+                <internalId value="2a774fd2-8b8d-440f-9249-9508c005dd00" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-opus-20240229" />
+                    <provider value="Anthropic" />
+                    <title value="Claude 3 Opus" />
+                  </llm>
+                </llm>
+              </chat>
             </list>
           </chats>
           <defaultLlm>

@@ -1,24 +1,56 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_URL = 'http://localhost:5000/api/auth'; // Adjust this URL as needed
+import api from '../api';
+import { handleError } from '../utils/errorHandler';
 
 export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
     try {
-        const response = await axios.post(`${API_URL}/login`, credentials);
+        const response = await api.post('/auth/login', credentials);
         localStorage.setItem('token', response.data.token);
         return response.data;
     } catch (error) {
+        handleError(error);
         return rejectWithValue(error.response.data);
     }
 });
 
 export const register = createAsyncThunk('user/register', async (userData, { rejectWithValue }) => {
     try {
-        const response = await axios.post(`${API_URL}/register`, userData);
+        const response = await api.post('/auth/register', userData);
         localStorage.setItem('token', response.data.token);
         return response.data;
     } catch (error) {
+        handleError(error);
+        return rejectWithValue(error.response.data);
+    }
+});
+
+export const refreshToken = createAsyncThunk('user/refreshToken', async (_, { rejectWithValue }) => {
+    try {
+        const response = await api.post('/auth/refresh-token');
+        localStorage.setItem('token', response.data.token);
+        return response.data;
+    } catch (error) {
+        handleError(error);
+        return rejectWithValue(error.response.data);
+    }
+});
+
+export const fetchUserProfile = createAsyncThunk('user/fetchProfile', async (_, { rejectWithValue }) => {
+    try {
+        const response = await api.get('/user/profile');
+        return response.data;
+    } catch (error) {
+        handleError(error);
+        return rejectWithValue(error.response.data);
+    }
+});
+
+export const updateUserProfile = createAsyncThunk('user/updateProfile', async (profileData, { rejectWithValue }) => {
+    try {
+        const response = await api.put('/user/profile', profileData);
+        return response.data;
+    } catch (error) {
+        handleError(error);
         return rejectWithValue(error.response.data);
     }
 });
@@ -30,6 +62,7 @@ const userSlice = createSlice({
         token: localStorage.getItem('token'),
         loading: false,
         error: null,
+        profile: null,
     },
     reducers: {
         logout: (state) => {
@@ -37,6 +70,7 @@ const userSlice = createSlice({
             state.user = null;
             state.token = null;
             state.error = null;
+            state.profile = null;
         },
         clearError: (state) => {
             state.error = null;
@@ -69,6 +103,21 @@ const userSlice = createSlice({
             .addCase(register.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload ? action.payload.message : 'Registration failed';
+            })
+            .addCase(refreshToken.fulfilled, (state, action) => {
+                state.token = action.payload.token;
+            })
+            .addCase(refreshToken.rejected, (state) => {
+                state.user = null;
+                state.token = null;
+                state.profile = null;
+                localStorage.removeItem('token');
+            })
+            .addCase(fetchUserProfile.fulfilled, (state, action) => {
+                state.profile = action.payload;
+            })
+            .addCase(updateUserProfile.fulfilled, (state, action) => {
+                state.profile = action.payload;
             });
     },
 });

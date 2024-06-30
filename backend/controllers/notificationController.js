@@ -16,12 +16,15 @@ exports.createNotification = async (userId, type, message) => {
         return notification;
     } catch (error) {
         console.error('Error creating notification:', error);
+        throw error;
     }
 };
 
 exports.getNotifications = async (req, res) => {
     try {
-        const notifications = await Notification.find({ userId: req.user.id }).sort('-createdAt');
+        const notifications = await Notification.find({ userId: req.user.id })
+            .sort('-createdAt')
+            .limit(50);
         res.json(notifications);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });

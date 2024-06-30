@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const GalaxySchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    id: { type: Number, required: true, unique: true },
     systems: [{ type: mongoose.Schema.Types.ObjectId, ref: 'System' }],
-    createdAt: { type: Date, default: Date.now },
+    isFull: { type: Boolean, default: false }
 });
 
 module.exports = mongoose.model('Galaxy', GalaxySchema);

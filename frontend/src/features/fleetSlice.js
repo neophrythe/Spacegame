@@ -24,16 +24,35 @@ const fleetSlice = createSlice({
         fortress: 0,
         transport: 0,
         colony: 0,
+        loading: false,
+        error: null
     },
     reducers: {},
     extraReducers: (builder) => {
         builder
+            .addCase(fetchFleet.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
             .addCase(fetchFleet.fulfilled, (state, action) => {
-                return action.payload;
+                state.loading = false;
+                return { ...state, ...action.payload };
+            })
+            .addCase(fetchFleet.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+            .addCase(buildShip.pending, (state) => {
+                state.loading = true;
+                state.error = null;
             })
             .addCase(buildShip.fulfilled, (state, action) => {
-                const { shipType, quantity } = action.payload;
-                state[shipType] += quantity;
+                state.loading = false;
+                state[action.payload.shipType] += action.payload.amount;
+            })
+            .addCase(buildShip.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
             });
     },
 });

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Navigation from './components/Navigation';
 import Dashboard from './components/Dashboard';
 import Buildings from './components/Buildings';
@@ -11,25 +11,49 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Clan from './components/Clan';
 import Notifications from './components/Notifications';
+import BattleReportViewer from './components/BattleReportViewer';
+import GalaxyView from './components/GalaxyView';
+import CoordinatedAttack from './components/CoordinatedAttack';
+import UserProfile from './components/UserProfile';
+import GlobalChat from './components/GlobalChat';
+import Tutorial from './components/Tutorial';
+import PrivateRoute from './components/PrivateRoute';
+import { initializeWebSocket } from './services/websocket';
+import { fetchResources } from './features/resourcesSlice';
+import './styles/custom.css';
 
 const App = () => {
+    const dispatch = useDispatch();
     const isAuthenticated = useSelector(state => state.user.token !== null);
+    const token = useSelector(state => state.user.token);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            initializeWebSocket(token);
+            dispatch(fetchResources());
+        }
+    }, [isAuthenticated, token, dispatch]);
 
     return (
-        <>
+        <Router>
             {isAuthenticated && <Navigation />}
-            <Routes>
-                <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/" />} />
-                <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/" />} />
-                <Route path="/" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />
-                <Route path="/buildings" element={isAuthenticated ? <Buildings /> : <Navigate to="/login" />} />
-                <Route path="/fleet" element={isAuthenticated ? <Fleet /> : <Navigate to="/login" />} />
-                <Route path="/research" element={isAuthenticated ? <Research /> : <Navigate to="/login" />} />
-                <Route path="/galaxy" element={isAuthenticated ? <Galaxy /> : <Navigate to="/login" />} />
-                <Route path="/clan" element={isAuthenticated ? <Clan /> : <Navigate to="/login" />} />
-                <Route path="/notifications" element={isAuthenticated ? <Notifications /> : <Navigate to="/login" />} />
-            </Routes>
-        </>
+            <Switch>
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/register" component={Register} />
+                <PrivateRoute exact path="/" component={Dashboard} />
+                <PrivateRoute exact path="/buildings" component={Buildings} />
+                <PrivateRoute exact path="/fleet" component={Fleet} />
+                <PrivateRoute exact path="/research" component={Research} />
+                <PrivateRoute exact path="/galaxy" component={GalaxyView} />
+                <PrivateRoute exact path="/clan" component={Clan} />
+                <PrivateRoute exact path="/notifications" component={Notifications} />
+                <PrivateRoute exact path="/battle-report/:id" component={BattleReportViewer} />
+                <PrivateRoute exact path="/coordinated-attack" component={CoordinatedAttack} />
+                <PrivateRoute exact path="/profile" component={UserProfile} />
+                <PrivateRoute exact path="/chat" component={GlobalChat} />
+                <PrivateRoute exact path="/tutorial" component={Tutorial} />
+            </Switch>
+        </Router>
     );
 };
 

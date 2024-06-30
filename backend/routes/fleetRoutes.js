@@ -1,11 +1,15 @@
 const express = require('express');
-const { getFleet, sendFleet, attack, colonize } = require('../controllers/fleetController');
-const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
+const fleetController = require('../controllers/fleetController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', authMiddleware, getFleet);
-router.post('/send', authMiddleware, sendFleet);
-router.post('/attack', authMiddleware, attack);
-router.post('/colonize', authMiddleware, colonize);
+// Fleet Management Routes
+router.get('/', authMiddleware, fleetController.getFleet);
+router.post('/build', authMiddleware, fleetController.buildShip);
+
+// Fleet Movement Routes
+router.post('/send', authMiddleware, fleetController.sendFleet);
+router.post('/attack', authMiddleware, fleetController.attack);
+router.post('/colonize', authMiddleware, fleetController.colonize);
 
 module.exports = router;

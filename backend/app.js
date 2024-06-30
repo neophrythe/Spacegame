@@ -12,7 +12,9 @@ const clanRoutes = require('./routes/clanRoutes');
 const espionageRoutes = require('./routes/espionageRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const achievementRoutes = require('./routes/achievementRoutes');
-
+const errorHandler = require('./middleware/errorHandler');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 const app = express();
 
 app.use(cors());
@@ -29,5 +31,7 @@ app.use('/api/clans', clanRoutes);
 app.use('/api/espionage', espionageRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/achievements', achievementRoutes);
+app.use(errorHandler);
+app.use(helmet);
 
 module.exports = app;
