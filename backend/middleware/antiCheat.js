@@ -2,10 +2,12 @@ const gameConfig = require('../config/gameConfig');
 const logger = require('../utils/logger');
 
 const antiCheatMiddleware = (req, res, next) => {
-    const validateResources = (resources) => {
-        const maxAllowedResources = 1000000000;
-        return Object.values(resources).every(value => value >= 0 && value <= maxAllowedResources);
-    };
+    if (req.path.startsWith('/api/resources') && req.body.resources) {
+        if (!validateResources(req.body.resources)) {
+            logger.warn('Invalid resource values detected', { userId: req.user?.id, resources: req.body.resources });
+            return res.status(400).json({ message: 'Invalid resource values detected' });
+        }
+    }
 
     const validateFleetMovement = (origin, destination, ships) => {
         const maxDistance = 5000;

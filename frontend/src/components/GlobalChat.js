@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Card, List, Input, Button } from 'antd';
-import socket from '../socketClient';
+import socket from '../services/websocket';
 
 const GlobalChat = () => {
     const [messages, setMessages] = useState([]);

@@ -1,5 +1,6 @@
 const gameConfig = require('../config/gameConfig');
 
+
 const calculateResourceProduction = (planet) => {
     const bonus = Math.random() * 0.3 + 0.9; // 90% to 120%
     const metalProduction = gameConfig.resources.baseProduction.metal * planet.buildings.metalMine * bonus;

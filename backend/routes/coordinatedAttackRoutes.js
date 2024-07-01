@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const coordinatedAttackController = require('../controllers/coordinatedAttackController');
-const auth = require('../middleware/auth');
+const auth = require('../middleware/authMiddleware');
 
 router.post('/create', auth, coordinatedAttackController.createCoordinatedAttack);
 router.post('/join', auth, coordinatedAttackController.joinCoordinatedAttack);

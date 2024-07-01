@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('express').Request} Request
+ * @typedef {import('express').Response} Response
+ */
+
 const Fleet = require('../models/Fleet');
 const Planet = require('../models/Planet');
 const User = require('../models/User');
@@ -5,12 +10,17 @@ const Research = require('../models/Research');
 const Clan = require('../models/Clan');
 const { fleetMovementQueue } = require('../utils/queue');
 const { getShipCosts } = require('../utils/shipUtils');
-const { calculateFlightTime } = require('../utils/gameLogic');
+const { calculateFlightTime, simulateCombat } = require('../utils/gameLogic');
 const { createNotification } = require('./notificationController');
 const { checkAchievement } = require('./achievementController');
 const gameConfig = require('../config/gameConfig');
 
-exports.getFleet = async (req, res) => {
+/**
+ * Get the fleet for the authenticated user
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ */
+const getFleet = async (req, res) => {
     try {
         const fleet = await Fleet.findOne({ userId: req.user.id });
         if (!fleet) {
@@ -23,7 +33,12 @@ exports.getFleet = async (req, res) => {
     }
 };
 
-exports.buildShip = async (req, res) => {
+/**
+ * Build a ship for the authenticated user
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ */
+const buildShip = async (req, res) => {
     const { planetId, shipType, amount } = req.body;
     try {
         const fleet = await Fleet.findOne({ userId: req.user.id });
@@ -76,7 +91,12 @@ exports.buildShip = async (req, res) => {
     }
 };
 
-exports.sendFleet = async (req, res) => {
+/**
+ * Send a fleet for the authenticated user
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ */
+const sendFleet = async (req, res) => {
     const { originPlanetId, destinationPlanetId, ships, resources, mission } = req.body;
 
     try {
@@ -142,7 +162,12 @@ exports.sendFleet = async (req, res) => {
     }
 };
 
-exports.attack = async (req, res) => {
+/**
+ * Launch an attack for the authenticated user
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ */
+const attack = async (req, res) => {
     const { originPlanetId, targetPlanetId, ships } = req.body;
 
     try {
@@ -191,7 +216,12 @@ exports.attack = async (req, res) => {
     }
 };
 
-exports.colonize = async (req, res) => {
+/**
+ * Launch a colonization mission for the authenticated user
+ * @param {Request} req - Express request object
+ * @param {Response} res - Express response object
+ */
+const colonize = async (req, res) => {
     const { originPlanetId, targetPlanetId, ships } = req.body;
 
     try {
@@ -236,6 +266,12 @@ exports.colonize = async (req, res) => {
     }
 };
 
+/**
+ * Calculate build time for ships
+ * @param {string} shipType - Type of ship to build
+ * @param {number} amount - Number of ships to build
+ * @returns {number} Build time in seconds
+ */
 function calculateBuildTime(shipType, amount) {
     const shipInfo = gameConfig.ships[shipType];
     if (!shipInfo) {

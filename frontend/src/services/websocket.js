@@ -2,8 +2,9 @@ import io from 'socket.io-client';
 import { store } from '../store';
 import { updateResources } from '../features/resourcesSlice';
 import { addNotification } from '../features/notificationSlice';
+import config from '../config';
 
-const socket = io(process.env.REACT_APP_WEBSOCKET_URL);
+const socket = io(config.SOCKET_URL);
 
 socket.on('connect', () => {
     console.log('Connected to websocket');

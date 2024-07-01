@@ -1,16 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../api';
-import { handleError } from '../utils/errorHandler';
 
-export const fetchResources = createAsyncThunk('resources/fetch', async (_, { rejectWithValue }) => {
-    try {
+export const fetchResources = createAsyncThunk(
+    'resources/fetch',
+    async () => {
         const response = await api.get('/resources');
         return response.data;
-    } catch (error) {
-        handleError(error);
-        return rejectWithValue(error.response.data);
     }
-});
+);
 
 const resourcesSlice = createSlice({
     name: 'resources',
@@ -39,7 +36,7 @@ const resourcesSlice = createSlice({
             })
             .addCase(fetchResources.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload ? action.payload.message : 'Failed to fetch resources';
+                state.error = action.error.message;
             });
     },
 });

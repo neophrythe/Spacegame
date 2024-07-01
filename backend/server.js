@@ -75,6 +75,11 @@ io.on('connection', (socket) => {
     });
 });
 
+// Add this new root route
+app.get('/', (req, res) => {
+    res.send('Welcome to the Space Game API');
+});
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api/auth', authRoutes);
 app.use('/api/buildings', buildingRoutes);

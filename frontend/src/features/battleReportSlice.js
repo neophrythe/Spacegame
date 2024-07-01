@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../api';
 
+// Thunk to fetch all battle reports
 export const fetchBattleReports = createAsyncThunk(
-    'battleReports/fetchBattleReports',
+    'battleReports/fetchAll',
     async (_, { rejectWithValue }) => {
         try {
             const response = await api.get('/battle-reports');
@@ -13,8 +14,9 @@ export const fetchBattleReports = createAsyncThunk(
     }
 );
 
+// Thunk to fetch a single battle report by ID
 export const fetchBattleReport = createAsyncThunk(
-    'battleReports/fetchBattleReport',
+    'battleReports/fetchById',
     async (id, { rejectWithValue }) => {
         try {
             const response = await api.get(`/battle-reports/${id}`);
@@ -36,6 +38,7 @@ const battleReportsSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
+            // Fetch all battle reports
             .addCase(fetchBattleReports.pending, (state) => {
                 state.loading = true;
             })
@@ -47,6 +50,7 @@ const battleReportsSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
+            // Fetch single battle report
             .addCase(fetchBattleReport.pending, (state) => {
                 state.loading = true;
             })

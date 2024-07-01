@@ -4,7 +4,12 @@ const Planet = require('../models/Planet');
 const { researchQueue } = require('../utils/queue');
 const gameConfig = require('../config/gameConfig');
 
-exports.getResearch = async (req, res) => {
+/**
+ * Get the research for the authenticated user
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ */
+const getResearch = async (req, res) => {
     try {
         const research = await Research.findOne({ userId: req.user.id });
         if (!research) {
@@ -16,7 +21,12 @@ exports.getResearch = async (req, res) => {
     }
 };
 
-exports.upgradeResearch = async (req, res) => {
+/**
+ * Upgrade research for the authenticated user
+ * @param {import('express').Request} req - Express request object
+ * @param {import('express').Response} res - Express response object
+ */
+const upgradeResearch = async (req, res) => {
     const { researchType } = req.body;
 
     try {

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navigation from './components/Navigation';
 import Dashboard from './components/Dashboard';
@@ -35,25 +35,26 @@ const App = () => {
     }, [isAuthenticated, token, dispatch]);
 
     return (
-        <Router>
+        <>
             {isAuthenticated && <Navigation />}
-            <Switch>
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/register" component={Register} />
-                <PrivateRoute exact path="/" component={Dashboard} />
-                <PrivateRoute exact path="/buildings" component={Buildings} />
-                <PrivateRoute exact path="/fleet" component={Fleet} />
-                <PrivateRoute exact path="/research" component={Research} />
-                <PrivateRoute exact path="/galaxy" component={GalaxyView} />
-                <PrivateRoute exact path="/clan" component={Clan} />
-                <PrivateRoute exact path="/notifications" component={Notifications} />
-                <PrivateRoute exact path="/battle-report/:id" component={BattleReportViewer} />
-                <PrivateRoute exact path="/coordinated-attack" component={CoordinatedAttack} />
-                <PrivateRoute exact path="/profile" component={UserProfile} />
-                <PrivateRoute exact path="/chat" component={GlobalChat} />
-                <PrivateRoute exact path="/tutorial" component={Tutorial} />
-            </Switch>
-        </Router>
+            <Routes>
+                <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+                <Route path="/register" element={isAuthenticated ? <Navigate to="/" /> : <Register />} />
+                <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+                <Route path="/buildings" element={<PrivateRoute><Buildings /></PrivateRoute>} />
+                <Route path="/fleet" element={<PrivateRoute><Fleet /></PrivateRoute>} />
+                <Route path="/research" element={<PrivateRoute><Research /></PrivateRoute>} />
+                <Route path="/galaxy" element={<PrivateRoute><GalaxyView /></PrivateRoute>} />
+                <Route path="/clan" element={<PrivateRoute><Clan /></PrivateRoute>} />
+                <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
+                <Route path="/battle-report/:id" element={<PrivateRoute><BattleReportViewer /></PrivateRoute>} />
+                <Route path="/coordinated-attack" element={<PrivateRoute><CoordinatedAttack /></PrivateRoute>} />
+                <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+                <Route path="/chat" element={<PrivateRoute><GlobalChat /></PrivateRoute>} />
+                <Route path="/tutorial" element={<PrivateRoute><Tutorial /></PrivateRoute>} />
+                <Route path="*" element={<Navigate to={isAuthenticated ? "/" : "/login"} />} />
+            </Routes>
+        </>
     );
 };
 

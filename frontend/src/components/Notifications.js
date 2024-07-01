@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import socket from '../socketClient';
+import socket from '../services/websocket';
 
 const Notifications = () => {
     const [notifications, setNotifications] = useState([]);

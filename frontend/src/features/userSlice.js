@@ -1,59 +1,48 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../api';
-import { handleError } from '../utils/errorHandler';
 
-export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
-    try {
+export const login = createAsyncThunk(
+    'user/login',
+    async (credentials) => {
         const response = await api.post('/auth/login', credentials);
         localStorage.setItem('token', response.data.token);
         return response.data;
-    } catch (error) {
-        handleError(error);
-        return rejectWithValue(error.response.data);
     }
-});
+);
 
-export const register = createAsyncThunk('user/register', async (userData, { rejectWithValue }) => {
-    try {
+export const register = createAsyncThunk(
+    'user/register',
+    async (userData) => {
         const response = await api.post('/auth/register', userData);
         localStorage.setItem('token', response.data.token);
         return response.data;
-    } catch (error) {
-        handleError(error);
-        return rejectWithValue(error.response.data);
     }
-});
+);
 
-export const refreshToken = createAsyncThunk('user/refreshToken', async (_, { rejectWithValue }) => {
-    try {
+export const refreshToken = createAsyncThunk(
+    'user/refreshToken',
+    async () => {
         const response = await api.post('/auth/refresh-token');
         localStorage.setItem('token', response.data.token);
         return response.data;
-    } catch (error) {
-        handleError(error);
-        return rejectWithValue(error.response.data);
     }
-});
+);
 
-export const fetchUserProfile = createAsyncThunk('user/fetchProfile', async (_, { rejectWithValue }) => {
-    try {
+export const fetchUserProfile = createAsyncThunk(
+    'user/fetchProfile',
+    async () => {
         const response = await api.get('/user/profile');
         return response.data;
-    } catch (error) {
-        handleError(error);
-        return rejectWithValue(error.response.data);
     }
-});
+);
 
-export const updateUserProfile = createAsyncThunk('user/updateProfile', async (profileData, { rejectWithValue }) => {
-    try {
+export const updateUserProfile = createAsyncThunk(
+    'user/updateProfile',
+    async (profileData) => {
         const response = await api.put('/user/profile', profileData);
         return response.data;
-    } catch (error) {
-        handleError(error);
-        return rejectWithValue(error.response.data);
     }
-});
+);
 
 const userSlice = createSlice({
     name: 'user',
@@ -89,7 +78,7 @@ const userSlice = createSlice({
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload ? action.payload.message : 'Login failed';
+                state.error = action.error.message;
             })
             .addCase(register.pending, (state) => {
                 state.loading = true;
@@ -102,7 +91,7 @@ const userSlice = createSlice({
             })
             .addCase(register.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload ? action.payload.message : 'Registration failed';
+                state.error = action.error.message;
             })
             .addCase(refreshToken.fulfilled, (state, action) => {
                 state.token = action.payload.token;

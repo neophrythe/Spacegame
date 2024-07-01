@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchBattleReport } from '../features/battleReportsSlice';
+import { fetchBattleReport } from '../features/battleReportSlice';
 import { Card, List, Typography } from 'antd';
 
 const { Title, Text } = Typography;
