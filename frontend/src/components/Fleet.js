@@ -5,7 +5,7 @@ import { Table, Button, InputNumber, message, Spin } from 'antd';
 
 const Fleet = () => {
     const dispatch = useDispatch();
-    const { fleet, loading, error } = useSelector((state) => state.fleet);
+    const { fleet, loading, error } = useSelector((state) => state.fleet || {});
     const [buildAmount, setBuildAmount] = useState({});
 
     useEffect(() => {
@@ -51,6 +51,10 @@ const Fleet = () => {
 
     if (loading) {
         return <Spin size="large" />;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
     }
 
     return (

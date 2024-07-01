@@ -1,10 +1,26 @@
 const gameConfig = require('../config/gameConfig');
 const logger = require('../utils/logger');
 
+const validateResources = (resources) => {
+    if (!resources || typeof resources !== 'object') {
+        return false;
+    }
+
+    const values = Object.values(resources);
+    return values.every(value => typeof value === 'number' && value >= 0);
+};
+
 const antiCheatMiddleware = (req, res, next) => {
+    if (!req.user) {
+        logger.warn('Unauthorized access attempt detected');
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const userId = req.user.id;
+
     if (req.path.startsWith('/api/resources') && req.body.resources) {
         if (!validateResources(req.body.resources)) {
-            logger.warn('Invalid resource values detected', { userId: req.user?.id, resources: req.body.resources });
+            logger.warn('Invalid resource values detected', { userId, resources: req.body.resources });
             return res.status(400).json({ message: 'Invalid resource values detected' });
         }
     }
@@ -20,30 +36,23 @@ const antiCheatMiddleware = (req, res, next) => {
     };
 
     const validateShipBuild = (shipType, amount) => {
-        if (!gameBalance.ships[shipType]) {
+        if (!gameConfig.ships[shipType]) {
             return false;
         }
         const maxBuildAmount = 1000;
         return amount > 0 && amount <= maxBuildAmount;
     };
 
-    if (req.path.startsWith('/api/resources')) {
-        if (!validateResources(req.body.resources)) {
-            logger.warn('Invalid resource values detected', { userId: req.user.id, resources: req.body.resources });
-            return res.status(400).json({ message: 'Invalid resource values detected' });
-        }
-    }
-
     if (req.path === '/api/fleet/move') {
         if (!validateFleetMovement(req.body.origin, req.body.destination, req.body.ships)) {
-            logger.warn('Invalid fleet movement detected', { userId: req.user.id, movement: req.body });
+            logger.warn('Invalid fleet movement detected', { userId, movement: req.body });
             return res.status(400).json({ message: 'Invalid fleet movement detected' });
         }
     }
 
     if (req.path === '/api/fleet/build') {
         if (!validateShipBuild(req.body.shipType, req.body.amount)) {
-            logger.warn('Invalid ship build request', { userId: req.user.id, shipType: req.body.shipType, amount: req.body.amount });
+            logger.warn('Invalid ship build request', { userId, shipType: req.body.shipType, amount: req.body.amount });
             return res.status(400).json({ message: 'Invalid ship build request' });
         }
     }

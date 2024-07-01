@@ -12,6 +12,7 @@ const Login = () => {
 
     useEffect(() => {
         if (token) {
+            localStorage.setItem('token', token);
             navigate('/');
         }
     }, [token, navigate]);
@@ -23,8 +24,18 @@ const Login = () => {
         }
     }, [error, dispatch]);
 
-    const onFinish = (values) => {
-        dispatch(login(values));
+    const onFinish = async (values) => {
+        try {
+            const resultAction = await dispatch(login(values));
+            if (login.fulfilled.match(resultAction)) {
+                message.success('Login successful');
+            } else {
+                message.error('Login failed: ' + resultAction.error.message);
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            message.error('An unexpected error occurred');
+        }
     };
 
     return (

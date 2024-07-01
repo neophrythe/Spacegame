@@ -4,16 +4,20 @@ const Planet = require('../models/Planet');
 const { researchQueue } = require('../utils/queue');
 const gameConfig = require('../config/gameConfig');
 
-/**
- * Get the research for the authenticated user
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- */
 const getResearch = async (req, res) => {
     try {
-        const research = await Research.findOne({ userId: req.user.id });
+        let research = await Research.findOne({ userId: req.user.id });
         if (!research) {
-            return res.status(404).json({ message: 'Research not found' });
+            research = new Research({
+                userId: req.user.id,
+                energyTechnology: 0,
+                laserTechnology: 0,
+                ionTechnology: 0,
+                hyperspaceTechnology: 0,
+                plasmaTechnology: 0,
+                // Add other research types as needed
+            });
+            await research.save();
         }
         res.json(research);
     } catch (error) {
@@ -21,11 +25,6 @@ const getResearch = async (req, res) => {
     }
 };
 
-/**
- * Upgrade research for the authenticated user
- * @param {import('express').Request} req - Express request object
- * @param {import('express').Response} res - Express response object
- */
 const upgradeResearch = async (req, res) => {
     const { researchType } = req.body;
 
@@ -41,18 +40,14 @@ const upgradeResearch = async (req, res) => {
         const currentLevel = research[researchType] || 0;
         const upgradeCost = calculateResearchCost(researchType, currentLevel);
 
-        // Check if planet has enough resources
         if (!hasEnoughResources(planet.resources, upgradeCost)) {
             return res.status(400).json({ message: 'Not enough resources' });
         }
 
-        // Deduct resources
         planet.resources = subtractResources(planet.resources, upgradeCost);
 
-        // Calculate research time
         const researchTime = calculateResearchTime(researchType, currentLevel);
 
-        // Add to research queue
         await researchQueue.add({
             userId: user._id,
             research: {

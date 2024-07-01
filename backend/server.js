@@ -9,6 +9,9 @@ const config = require('./config');
 const runScheduledTasks = require('./utils/scheduledTasks');
 const jwt = require('jsonwebtoken');
 const { swaggerUi, specs } = require('./swaggerConfig');
+const authMiddleware = require('./middleware/authMiddleware');
+const antiCheatMiddleware = require('./middleware/antiCheat');
+const logger = require('./utils/logger');
 
 const authRoutes = require('./routes/authRoutes');
 const buildingRoutes = require('./routes/buildingRoutes');
@@ -21,10 +24,9 @@ const clanRoutes = require('./routes/clanRoutes');
 const espionageRoutes = require('./routes/espionageRoutes');
 const battleReportRoutes = require('./routes/battleReports');
 const coordinatedAttackRoutes = require('./routes/coordinatedAttackRoutes');
+const resourceRoutes = require('./routes/resourceRoutes'); // Add this line
 
 const errorHandler = require('./middleware/errorHandler');
-const antiCheatMiddleware = require('./middleware/antiCheat');
-const logger = require('./utils/logger');
 
 const app = express();
 const server = http.createServer(app);
@@ -36,22 +38,48 @@ const io = socketIo(server, {
 });
 
 app.use(helmet());
+app.use(cors());
+app.use(express.json());
+
+app.use('/api/auth', authRoutes);
+
+app.use(authMiddleware); // Apply authentication middleware globally
 
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 100
+    max: 100,
 });
 
 app.use(apiLimiter);
 
 const combatLimiter = rateLimit({
     windowMs: 5 * 60 * 1000,
-    max: 10
+    max: 10,
 });
 
-app.use(cors());
-app.use(express.json());
-app.use(antiCheatMiddleware);
+app.use('/api/fleet/attack', combatLimiter);
+
+app.use('/api/buildings', buildingRoutes);
+app.use('/api/fleet', fleetRoutes);
+app.use('/api/research', researchRoutes);
+app.use('/api/galaxies', galaxyRoutes);
+app.use('/api/planets', planetRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/clans', clanRoutes);
+app.use('/api/espionage', espionageRoutes);
+app.use('/api/battle-reports', battleReportRoutes);
+app.use('/api/coordinated-attacks', coordinatedAttackRoutes);
+app.use('/api/resources', resourceRoutes); // Add this line
+
+// Apply anti-cheat middleware selectively to routes that need it
+app.use('/api/resources', antiCheatMiddleware);
+app.use('/api/fleet/move', antiCheatMiddleware);
+app.use('/api/fleet/build', antiCheatMiddleware);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+app.use(errorHandler);
+
+runScheduledTasks();
 
 mongoose.connect(config.db, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => logger.info('MongoDB connected'))
@@ -79,25 +107,6 @@ io.on('connection', (socket) => {
 app.get('/', (req, res) => {
     res.send('Welcome to the Space Game API');
 });
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
-app.use('/api/auth', authRoutes);
-app.use('/api/buildings', buildingRoutes);
-app.use('/api/fleet', fleetRoutes);
-app.use('/api/research', researchRoutes);
-app.use('/api/galaxies', galaxyRoutes);
-app.use('/api/planets', planetRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/clans', clanRoutes);
-app.use('/api/espionage', espionageRoutes);
-app.use('/api/battle-reports', battleReportRoutes);
-app.use('/api/coordinated-attacks', coordinatedAttackRoutes);
-
-app.use('/api/fleet/attack', combatLimiter);
-
-app.use(errorHandler);
-
-runScheduledTasks();
 
 const PORT = config.port || 5000;
 server.listen(PORT, () => logger.info(`Server running on port ${PORT}`));

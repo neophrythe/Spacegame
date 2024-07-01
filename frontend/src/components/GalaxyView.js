@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGalaxy } from '../features/galaxySlice';
-import { Table, Tag } from 'antd';
+import { Table, Tag, Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 
 const GalaxyView = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
-    const { currentGalaxy, loading, error } = useSelector(state => state.galaxies);
+    const { currentGalaxy, loading, error } = useSelector(state => state.galaxies || {});
 
     useEffect(() => {
         dispatch(fetchGalaxy(id));
@@ -15,7 +15,7 @@ const GalaxyView = () => {
 
     const columns = [
         { title: 'Position', dataIndex: ['position', 'system', 'planet'], key: 'position',
-            render: (_, record) => `[${record.system.position}:${record.position}]` },
+            render: (_, record) => `[${record.system?.position}:${record.position}]` },
         { title: 'Planet Name', dataIndex: 'name', key: 'name' },
         { title: 'Player', dataIndex: 'playerName', key: 'player' },
         { title: 'Alliance', dataIndex: 'alliance', key: 'alliance',
@@ -30,17 +30,17 @@ const GalaxyView = () => {
         },
     ];
 
-    if (loading) return <div>Loading galaxy data...</div>;
+    if (loading) return <Spin size="large" />;
     if (error) return <div>Error: {error}</div>;
     if (!currentGalaxy) return <div>No galaxy data available</div>;
 
-    const data = currentGalaxy.systems.flatMap(system =>
-        system.planets.map(planet => ({
+    const data = currentGalaxy.systems?.flatMap(system =>
+        system.planets?.map(planet => ({
             key: planet._id,
             system: { position: system.position },
             ...planet
         }))
-    );
+    ) || [];
 
     return (
         <div>

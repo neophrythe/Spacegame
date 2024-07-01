@@ -4,9 +4,9 @@ const gameConfig = require('../config/gameConfig');
 const planetSchema = new mongoose.Schema({
     name: String,
     resources: {
-        metal: { type: Number, default: 0 },
-        crystal: { type: Number, default: 0 },
-        deuterium: { type: Number, default: 0 },
+        metal: { type: Number, default: 500 },
+        crystal: { type: Number, default: 300 },
+        deuterium: { type: Number, default: 100 },
     },
     storage: {
         metal: { type: Number, default: 10000 },
@@ -19,9 +19,9 @@ const planetSchema = new mongoose.Schema({
         deuterium: { type: Number, default: 0 },
     },
     buildings: {
-        metalMine: { type: Number, default: 0 },
-        crystalMine: { type: Number, default: 0 },
-        deuteriumMine: { type: Number, default: 0 },
+        metalMine: { type: Number, default: 1 },
+        crystalMine: { type: Number, default: 1 },
+        deuteriumMine: { type: Number, default: 1 },
         metalStorage: { type: Number, default: 0 },
         crystalStorage: { type: Number, default: 0 },
         deuteriumStorage: { type: Number, default: 0 },
@@ -34,7 +34,8 @@ const planetSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     lastResourceUpdate: { type: Date, default: Date.now },
     systemId: { type: mongoose.Schema.Types.ObjectId, ref: 'System', required: true },
-    position: { type: Number, required: true },
+    galaxyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Galaxy', required: true },
+    position: { type: Number, required: true, default: 1 },
 });
 
 planetSchema.methods.updateResources = async function () {

@@ -14,7 +14,7 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
+        config.headers['x-auth-token'] = token;
     }
     return config;
 }, (error) => {
@@ -30,7 +30,7 @@ api.interceptors.response.use((response) => {
         try {
             const { token } = await store.dispatch(refreshToken()).unwrap();
             localStorage.setItem('token', token);
-            originalRequest.headers['Authorization'] = `Bearer ${token}`;
+            originalRequest.headers['x-auth-token'] = token;
             return api(originalRequest);
         } catch (refreshError) {
             return Promise.reject(refreshError);

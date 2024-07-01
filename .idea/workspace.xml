@@ -5,33 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb5c7b32-49b6-4e76-a34a-995158676592" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/utils/frontendErrorhandler.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/PrivateRoute.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/features/notificationSlice.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/controllers/resourceController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/routes/resourceRoutes.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/controllers/fleetController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controllers/fleetController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/controllers/authController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controllers/authController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/controllers/galaxyController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controllers/galaxyController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/controllers/researchController.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/controllers/researchController.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/middleware/antiCheat.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/middleware/antiCheat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/routes/battleReports.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/battleReports.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/routes/coordinatedAttackRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/routes/coordinatedAttackRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/middleware/authMiddleware.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/middleware/authMiddleware.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/models/Planet.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/models/Planet.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/utils/errorHandler.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/errorHandler.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/utils/resourceUtils.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/resourceUtils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/utils/gameLogic.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/gameLogic.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/utils/userUtils.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/utils/userUtils.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/BattleReportViewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/BattleReportViewer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/GlobalChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/GlobalChat.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Buildings.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Buildings.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Fleet.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Fleet.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Galaxy.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Galaxy.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/GalaxyView.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/GalaxyView.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/Login.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Notifications.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Notifications.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/features/battleReportSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/features/battleReportSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/features/galaxySlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/features/galaxySlice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Navigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Research.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Research.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/features/resourcesSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/features/resourcesSlice.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/features/userSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/features/userSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/services/websocket.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/services/websocket.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/socketClient.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/styles/custom.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/custom.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +122,7 @@
       <workItem from="1718715085740" duration="2915000" />
       <workItem from="1718926322270" duration="6548000" />
       <workItem from="1719338575150" duration="5401000" />
-      <workItem from="1719780539329" duration="10667000" />
+      <workItem from="1719780539329" duration="16782000" />
     </task>
     <servers />
   </component>

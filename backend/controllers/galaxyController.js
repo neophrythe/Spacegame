@@ -2,6 +2,7 @@ const Galaxy = require('../models/Galaxy');
 const System = require('../models/System');
 const Planet = require('../models/Planet');
 const User = require('../models/User');
+const logger = require('../utils/logger');
 
 exports.getPlayerLocation = async (req, res) => {
     try {
@@ -19,6 +20,7 @@ exports.getPlayerLocation = async (req, res) => {
             nearbySystems
         });
     } catch (error) {
+        logger.error('Error fetching player location:', error);
         res.status(500).json({ message: 'Error fetching player location', error: error.message });
     }
 };
@@ -27,6 +29,10 @@ exports.colonizePlanet = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).populate('homePlanet');
         const planet = await Planet.findById(req.params.planetId).populate('systemId');
+
+        if (!planet) {
+            return res.status(404).json({ message: 'Planet not found' });
+        }
 
         if (planet.ownerId) {
             return res.status(400).json({ message: 'This planet is already colonized' });
@@ -54,12 +60,13 @@ exports.colonizePlanet = async (req, res) => {
             nearbySystems
         });
     } catch (error) {
+        logger.error('Error colonizing planet:', error);
         res.status(500).json({ message: 'Error colonizing planet', error: error.message });
     }
 };
 
 async function assignPlayerLocation(user) {
-    const galaxy = await Galaxy.findOne({ isFull: false }).sort('id');
+    let galaxy = await Galaxy.findOne({ isFull: false }).sort('id');
     if (!galaxy) {
         galaxy = await Galaxy.create({ id: 1 });
     }

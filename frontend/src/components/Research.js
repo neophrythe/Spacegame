@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchResearch, upgradeResearch } from '../features/researchSlice';
-import { Button, Card, List, Progress } from 'antd';
+import { Button, Card, List, Progress, Spin } from 'antd';
 
 const Research = () => {
     const dispatch = useDispatch();
-    const research = useSelector((state) => state.research);
+    const { research, loading, error } = useSelector((state) => state.research || {});
 
     useEffect(() => {
         dispatch(fetchResearch());
@@ -14,6 +14,18 @@ const Research = () => {
     const handleUpgrade = (researchType) => {
         dispatch(upgradeResearch(researchType));
     };
+
+    if (loading) {
+        return <Spin size="large" />;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    if (!research || typeof research !== 'object') {
+        return <div>No research data available</div>;
+    }
 
     return (
         <div>

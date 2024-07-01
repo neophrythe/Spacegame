@@ -1,8 +1,13 @@
 const gameConfig = require('../config/gameConfig');
 
-const calculateResourceProduction = (mineLevel, researchLevel) => {
-    const baseProduction = gameConfig.resources.baseProduction.metal; // Assuming metal as base
-    return Math.floor(baseProduction * Math.pow(gameConfig.resources.productionFactor, mineLevel) * (1 + researchLevel * gameConfig.resources.researchBonus));
+const calculateResourceProduction = (planet) => {
+    const production = {};
+    ['metal', 'crystal', 'deuterium'].forEach(resourceType => {
+        const mineLevel = planet.buildings[`${resourceType}Mine`];
+        const baseProduction = gameConfig.resources.baseProduction[resourceType];
+        production[resourceType] = Math.floor(baseProduction * Math.pow(gameConfig.resources.productionFactor, mineLevel));
+    });
+    return production;
 };
 
 const calculateBuildingTime = (buildingLevel, buildingType) => {

@@ -7,7 +7,7 @@ const { Title, Text } = Typography;
 
 const Galaxy = () => {
     const dispatch = useDispatch();
-    const { playerLocation, nearbySystems, loading, error } = useSelector((state) => state.galaxies);
+    const { playerLocation, nearbySystems, loading, error } = useSelector((state) => state.galaxies || {});
     const [colonizationTarget, setColonizationTarget] = useState(null);
 
     useEffect(() => {
@@ -73,6 +73,10 @@ const Galaxy = () => {
 
     if (loading) {
         return <Spin size="large" />;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
     }
 
     return (
